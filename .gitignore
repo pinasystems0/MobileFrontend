@@ -1,0 +1,104 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# DO NOT UPLOAD GROQ KEY
+lib/screens/secrets.dart
+lib/screens/constants.dart
+
+# Flutter build outputs
+/android/build/
+/ios/build/
+/linux/build/
+/macos/build/
+/windows/build/
+/web/build/
+
+# Node.js
+backend/node_modules/
+backend/.env
+backend/.env.local
+backend/.env.production
+backend/logs/
+backend/*.log
+
+# iOS
+ios/Pods/
+ios/Podfile.lock
+ios/Runner.xcworkspace/xcuserdata/
+ios/Runner.xcodeproj/xcuserdata/
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+
+# macOS
+macos/Runner.xcworkspace/xcuserdata/
+macos/Runner.xcodeproj/xcuserdata/
+
+# Windows
+windows/.vs/
+windows/x64/
+
+# Linux
+linux/build/
+
+# Web
+web/.firebase/
+
+# Pub package manager
+.packages
+pubspec.lock
+
+# Flutter metadata
+.metadata
+
+# Temporary files
+*.tmp
+*.bak
+
+#wifi config
+.env
