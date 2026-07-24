@@ -13,6 +13,8 @@ import 'package:pina/screens/loginscreen.dart';
 import 'package:pina/screens/registration/registration_step2.dart';
 import 'package:pina/screens/registration/affiliate_final_profile.dart';
 import 'package:pina/screens/registration/hr_agency.dart';
+import 'package:pina/screens/registration/travel_agency_profile.dart';
+import 'package:pina/screens/registration/hotels_lodging_profile.dart';
 import 'package:pina/screens/trial.dart';
 import 'package:pina/services/session_service.dart';
 import 'package:pina/ui_template/utils/template_theme.dart';
@@ -90,6 +92,16 @@ class _RegistrationState extends State<Registration> {
     return accountType == "Company" && selectedRole == "HR Placement Agency";
   }
 
+  // Helper to check if Travel Agency is selected
+  bool get _isTravelAgency {
+    return accountType == "Company" && selectedRole == "Travel Agency";
+  }
+
+  // Helper to check if Hotels & Lodging is selected
+  bool get _isHotelsLodging {
+    return accountType == "Company" && selectedRole == "Hotels & Lodging";
+  }
+
   // Dynamic roles based on accountType
   List<String> get roles {
     if (accountType == "Affiliate") {
@@ -99,6 +111,8 @@ class _RegistrationState extends State<Registration> {
       return [
         "Educational Institute",
         "HR Placement Agency",
+        "Travel Agency",
+        "Hotels & Lodging",
       ];
     }
     return [
@@ -106,6 +120,8 @@ class _RegistrationState extends State<Registration> {
       "Teacher",
       "Employee",
       "Professional",
+      "Tourist",
+      "Travel Guide",
     ];
   }
   
@@ -163,8 +179,11 @@ class _RegistrationState extends State<Registration> {
       if (widget.editRole == null || widget.editRole!.isEmpty) {
         _loadCurrentRole();
       } else {
-        // Set accountType based on editRole
-        if (widget.editRole == "Educational Institute" || widget.editRole == "HR Placement Agency") {
+      // Set accountType based on editRole
+        if (widget.editRole == "Educational Institute" || 
+            widget.editRole == "HR Placement Agency" ||
+            widget.editRole == "Travel Agency" ||
+            widget.editRole == "Hotels & Lodging") {
           accountType = "Company";
           if (widget.editRole == "Educational Institute") {
             isEducationalInstitute = true;
@@ -196,7 +215,10 @@ class _RegistrationState extends State<Registration> {
     final normalizedAffiliateRole = _normalizeAffiliateRole(currentRole);
     if (currentRole != null && currentRole.isNotEmpty) {
       setState(() {
-        if (currentRole == "Educational Institute" || currentRole == "HR Placement Agency") {
+        if (currentRole == "Educational Institute" || 
+            currentRole == "HR Placement Agency" ||
+            currentRole == "Travel Agency" ||
+            currentRole == "Hotels & Lodging") {
           accountType = "Company";
           selectedRole = currentRole;
           if (currentRole == "Educational Institute") {
@@ -641,12 +663,20 @@ class _RegistrationState extends State<Registration> {
 
     if (action == "submit") {
       if (!widget.isEditMode) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
+        // For Company account types (Travel Agency, Hotels & Lodging, etc.),
+        // "Submit" must continue the registration flow, not login.
+        if (accountType == "Company") {
+          // Fall through to continue to RegistrationStep2 below
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+          );
+          return;
+        }
+      } else {
+        return;
       }
-      return;
     }
 
     String categoryForNext;
@@ -1086,7 +1116,10 @@ class _RegistrationState extends State<Registration> {
         style: _compactFieldTextStyle,
         decoration: _compactInputDecoration(
           label: accountType == "Company"
-              ? (_isHrPlacementAgency ? "Agency Name" : (isEducationalInstitute ? "Institute Name" : "Company Name"))
+              ? (_isHrPlacementAgency ? "Agency Name" : 
+                 (_isTravelAgency ? "Agency Name" :
+                 (_isHotelsLodging ? "Property Name" :
+                 (isEducationalInstitute ? "Institute Name" : "Company Name"))))
               : accountType == "Affiliate"
                   ? "Affiliate Name"
                   : "Full Name",
@@ -1378,7 +1411,7 @@ class _RegistrationState extends State<Registration> {
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         " and ",
                         style: TextStyle(
                           fontSize: 11,

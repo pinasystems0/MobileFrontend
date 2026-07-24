@@ -14,7 +14,11 @@ import 'package:pina/ui_template/utils/responsive_form_layout.dart';
 import 'package:pina/ui_template/utils/template_theme.dart';
 import 'package:pina/screens/registration/educational_institute_profile.dart';
 import 'package:pina/screens/registration/hr_agency.dart';
-// ❌ REMOVED: import 'package:pina/screens/registration/company_step3_identity.dart';
+import 'package:pina/screens/registration/travel_agency_profile.dart';
+import 'package:pina/screens/registration/hotels_lodging_profile.dart';
+import 'package:pina/screens/registration/company_ai.dart';
+import 'package:pina/screens/registration/tourist_profile.dart';
+import 'package:pina/screens/registration/travel_guide_profile.dart';
 
 class RegistrationStep2 extends StatefulWidget {
   final String email;
@@ -109,6 +113,30 @@ class _RegistrationStep2State extends State<RegistrationStep2> {
               ),
             );
           }
+          else if (widget.category == "Tourist") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TouristProfile(email: widget.email),
+              ),
+            );
+          }
+          else if (widget.category == "Travel Guide") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TravelGuideProfile(email: widget.email),
+              ),
+            );
+          }
+          // else if (widget.category == "Company AI") {
+          //   Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (_) => const CompanyAIScreen(),
+          //     ),
+          //   );
+          // }
           else if (widget.category == "Educational Institute") {
             Navigator.pushReplacement(
               context,
@@ -122,6 +150,26 @@ class _RegistrationStep2State extends State<RegistrationStep2> {
               context,
               MaterialPageRoute(
                 builder: (_) => HrAgencyProfile(
+                  email: widget.email,
+                ),
+              ),
+            );
+          }
+          else if (widget.category == "Travel Agency") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TravelAgencyProfile(
+                  email: widget.email,
+                ),
+              ),
+            );
+          }
+          else if (widget.category == "Hotels & Lodging") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => HotelsLodgingProfile(
                   email: widget.email,
                 ),
               ),
@@ -143,21 +191,16 @@ class _RegistrationStep2State extends State<RegistrationStep2> {
           }
         }
         else {
-          // When nextStep != 3, check for Professional category
-          if (widget.category == "Professional") {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const ProfessionDetailsScreen(),
-              ),
-            );
-          }
-          else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const RegistrationDone()),
-            );
-          }
+          // Fallback for unexpected nextStep values.
+          // All known categories (Student, Teacher, Employee,
+          // Educational Institute, HR Placement Agency, Travel Agency,
+          // Hotels & Lodging, Professional) are routed in the nextStep == 3
+          // branch above, so we only reach this fallback when the backend
+          // returns an unfamiliar nextStep value.
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const RegistrationDone()),
+          );
         }
       } else {
         _snack(data["toastMessage"] ?? "Failed to save Step 2");

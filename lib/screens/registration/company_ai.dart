@@ -93,7 +93,169 @@ class _CompanyAIState extends State<CompanyAI> {
           .map((e) => e.key)
           .toList();
 
+      // ──────────────────────────────────────────────────────────────────────
+      // Read HR Agency profile data from SharedPreferences (mirroring
+      // the existing save pattern in HrAgencyProfile).
+      // ──────────────────────────────────────────────────────────────────────
+      final String? hrNumberOfEmployees =
+          prefs.getString('hrNumberOfEmployees');
+      final List<String> hrActivities =
+          prefs.getStringList('hrActivities') ?? [];
+      final List<String> hrIndustries =
+          prefs.getStringList('hrIndustries') ?? [];
+      final List<String> hrOperations =
+          prefs.getStringList('hrOperations') ?? [];
+      final List<String> hrCountries =
+          prefs.getStringList('hrCountries') ?? [];
+      final List<String> hrHiringTypes =
+          prefs.getStringList('hrHiringTypes') ?? [];
+
+      final bool hasHrData =
+          hrNumberOfEmployees != null && hrNumberOfEmployees.isNotEmpty;
+
+      // ──────────────────────────────────────────────────────────────────────
+      // Read Travel Agency profile data from SharedPreferences (mirroring
+      // the save pattern in TravelAgencyProfile).
+      // ──────────────────────────────────────────────────────────────────────
+      final String? travelAgencyName =
+          prefs.getString('travelAgencyName');
+      final String? travelRegistrationNo =
+          prefs.getString('travelRegistrationNo');
+      final String? travelContactPerson =
+          prefs.getString('travelContactPerson');
+      final String? travelBusinessEmail =
+          prefs.getString('travelBusinessEmail');
+      final String? travelMobile =
+          prefs.getString('travelMobile');
+      final String? travelOfficeAddress =
+          prefs.getString('travelOfficeAddress');
+      final String? travelWebsite =
+          prefs.getString('travelWebsite');
+      final String? travelGst =
+          prefs.getString('travelGst');
+      final bool? travelApprovedByIata =
+          prefs.getBool('travelApprovedByIata');
+      final List<String> travelModesOfTransport =
+          prefs.getStringList('travelModesOfTransport') ?? [];
+      final bool? travelHasMgmtSoftware =
+          prefs.getBool('travelHasMgmtSoftware');
+      final String? travelSoftwareName =
+          prefs.getString('travelSoftwareName');
+      final List<String> travelServicesOffered =
+          prefs.getStringList('travelServicesOffered') ?? [];
+      final String? travelOperationsType =
+          prefs.getString('travelOperationsType');
+      final String? travelCountriesCovered =
+          prefs.getString('travelCountriesCovered');
+      final String? travelNumberOfEmployees =
+          prefs.getString('travelNumberOfEmployees');
+
+      final bool hasTravelData =
+          travelAgencyName != null && travelAgencyName.isNotEmpty;
+
+      // ──────────────────────────────────────────────────────────────────────
+      // Read Hotels & Lodging profile data from SharedPreferences (mirroring
+      // the save pattern in HotelsLodgingProfile).
+      // ──────────────────────────────────────────────────────────────────────
+      final String? hotelPropertyName =
+          prefs.getString('hotelPropertyName');
+      final String? hotelPropertyType =
+          prefs.getString('hotelPropertyType');
+      final String? hotelStarRating =
+          prefs.getString('hotelStarRating');
+      final List<String> hotelAmenities =
+          prefs.getStringList('hotelAmenities') ?? [];
+      final String? hotelRooms =
+          prefs.getString('hotelRooms');
+      final String? hotelEmployees =
+          prefs.getString('hotelEmployees');
+      final String? hotelContactPerson =
+          prefs.getString('propertyContactPerson');
+      final String? hotelBusinessEmail =
+          prefs.getString('propertyBusinessEmail');
+      final String? hotelMobile =
+          prefs.getString('propertyMobile');
+      final String? hotelAddress =
+          prefs.getString('propertyAddress');
+      final String? hotelWebsite =
+          prefs.getString('propertyWebsite');
+      final String? hotelGst =
+          prefs.getString('propertyGst');
+      final String? hotelCheckInTime =
+          prefs.getString('propertyCheckInTime');
+      final String? hotelCheckOutTime =
+          prefs.getString('propertyCheckOutTime');
+
+      final bool hasHotelsData =
+          hotelPropertyName != null && hotelPropertyName.isNotEmpty;
+
       print('Starting API call for AI preferences');
+
+      // ──────────────────────────────────────────────────────────────────────
+      // Build the request body starting with AI preferences, then merge
+      // profile data for any company type that was completed.
+      // ──────────────────────────────────────────────────────────────────────
+      final Map<String, dynamic> requestBody = {
+        'usingGenerativeAI': usingAI ?? false,
+        'aiModelsUsed': selectedModels,
+        'aiUsageReason': whyCtrl.text,
+        'aiHelpExpectation': helpCtrl.text,
+      };
+
+      // Include HR Agency profile data if the user completed that flow
+      if (hasHrData) {
+        requestBody['hrAgencyProfile'] = {
+          'numberOfEmployees': hrNumberOfEmployees,
+          'activities': hrActivities,
+          'industries': hrIndustries,
+          'operations': hrOperations,
+          'countries': hrCountries,
+          'hiringTypes': hrHiringTypes,
+        };
+      }
+
+      // Include Travel Agency profile data if the user completed that flow
+      if (hasTravelData) {
+        requestBody['travelAgencyProfile'] = {
+          'agencyName': travelAgencyName,
+          'registrationNumber': travelRegistrationNo,
+          'contactPerson': travelContactPerson,
+          'businessEmail': travelBusinessEmail,
+          'mobile': travelMobile,
+          'officeAddress': travelOfficeAddress,
+          'website': travelWebsite,
+          'gstNumber': travelGst,
+          'approvedByIata': travelApprovedByIata,
+          'modesOfTransport': travelModesOfTransport,
+          'hasTravelMgmtSoftware': travelHasMgmtSoftware,
+          'softwareName':
+              travelHasMgmtSoftware == true ? (travelSoftwareName ?? '') : '',
+          'servicesOffered': travelServicesOffered,
+          'operationsType': travelOperationsType,
+          'countriesCovered': travelCountriesCovered,
+          'numberOfEmployees': travelNumberOfEmployees,
+        };
+      }
+
+      // Include Hotels & Lodging profile data if the user completed that flow
+      if (hasHotelsData) {
+        requestBody['hotelsLodgingProfile'] = {
+          'propertyName': hotelPropertyName,
+          'propertyType': hotelPropertyType,
+          'starRating': hotelStarRating,
+          'amenities': hotelAmenities,
+          'numberOfRooms': hotelRooms,
+          'numberOfEmployees': hotelEmployees,
+          'contactPerson': hotelContactPerson,
+          'businessEmail': hotelBusinessEmail,
+          'mobile': hotelMobile,
+          'propertyAddress': hotelAddress,
+          'website': hotelWebsite,
+          'gstNumber': hotelGst,
+          'checkInTime': hotelCheckInTime,
+          'checkOutTime': hotelCheckOutTime,
+        };
+      }
 
 // ✅ STEP 6: API endpoint (keeping as is for now - can be renamed later)
       final response = await http.post(
@@ -102,12 +264,7 @@ class _CompanyAIState extends State<CompanyAI> {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         },
-        body: jsonEncode({
-          'usingGenerativeAI': usingAI ?? false,
-          'aiModelsUsed': selectedModels,
-          'aiUsageReason': whyCtrl.text,
-          'aiHelpExpectation': helpCtrl.text,
-        }),
+        body: jsonEncode(requestBody),
       ).timeout(const Duration(seconds: 15));
 
       final data = jsonDecode(response.body);

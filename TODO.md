@@ -1,6 +1,15 @@
-# TODO - Widget Library crash root-cause investigation
+# TODO: Add Travel Agency Profile Data to Final Registration Payload
 
-- [ ] Phase 1: Freeze only `MyAIBackground` animation (no other changes). Render a single static frame while keeping UI design identical. Add minimal logging: once when `MyAIBackground` builds; once when `WidgetLibraryScreen` starts building.
-- [ ] Run app and test whether Widget Library still crashes.
-- [ ] Stop after Phase 1 until user reports results.
+## Objective
+Extend `CompanyAI._submit()` to include Travel Agency data in the final registration payload, mirroring the existing HR Agency pattern.
+
+## Steps
+
+- [x] Step 0: Analyze codebase and understand flow
+- [x] Step 1: Present plan and get approval
+- [x] Step 2: Edit `company_ai.dart` — Add HR Agency data reading from SharedPreferences
+- [x] Step 3: Edit `company_ai.dart` — Add Travel Agency data reading from SharedPreferences
+- [x] Step 4: Edit `company_ai.dart` — Include both in final payload
+- [x] Step 5: Verify no other files were modified
+- [ ] Step 6: Confirm solution compiles (optional — user can verify)
 

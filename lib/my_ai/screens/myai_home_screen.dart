@@ -1,11 +1,13 @@
-import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+
 
 import '../../ui_template/utils/myai_background.dart';
 import 'ready_content_screen.dart';
 import 'user_widgets_screen.dart';
 import 'widget_library_screen.dart';
+import '../../screens/chatbot/chatbot_screen.dart';
+
 
 class MyAiHomeScreen extends StatelessWidget {
   final String? userEmail;
@@ -35,6 +37,12 @@ class MyAiHomeScreen extends StatelessWidget {
       title: 'Widget Library',
       subtitle: 'Browse all widgets',
       icon: Icons.library_add_rounded,
+    ),
+    _HomeSection(
+      title: 'Chatbot',
+      subtitle: 'Learn with guided Q&A',
+
+      icon: Icons.school_rounded,
     ),
   ];
 
@@ -109,7 +117,12 @@ class MyAiHomeScreen extends StatelessWidget {
       case 'Widget Library':
         screen = WidgetLibraryScreen(userEmail: userEmail);
         break;
+      case 'Chatbot':
+        screen = const ChatbotScreen();
+        break;
+
       case 'Agents':
+
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(

@@ -15,10 +15,10 @@ import 'package:pina/screens/reverse_search_screen.dart';
 import 'package:pina/conversion/main_menu_screen.dart';
 import 'package:pina/screens/my_account_screen.dart';
 import 'package:pina/screens/study_abroad/study_abroad_screen.dart';
-import 'package:pina/screens/balance_report_screen.dart';
-import 'package:pina/screens/balance_history_screen.dart';
-import 'package:pina/screens/transaction_history_screen.dart';
-import 'package:pina/screens/pricing_menu_screen.dart';
+// import 'package:pina/screens/balance_report_screen.dart';
+// import 'package:pina/screens/balance_history_screen.dart';
+// import 'package:pina/screens/transaction_history_screen.dart';
+// import 'package:pina/screens/pricing_menu_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pina/services/session_service.dart';
 import '../services/role_service.dart';
@@ -26,6 +26,9 @@ import 'package:pina/ui_template/utils/template_theme.dart';
 import 'package:pina/screens/generate_screen.dart';
 import 'package:pina/screens/teacher_generate_screen.dart';
 import 'package:pina/screens/question_answer_generator/question_bank_screen.dart';
+import 'package:pina/screens/chatbot/chatbot_screen.dart';
+import 'package:pina/screens/practice_questions/practice_questions_screen.dart';
+
 
 class HamburgerMenu extends StatefulWidget {
   final String? userId;
@@ -205,12 +208,7 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
     return AppLocale.translations[id]?[widget.selectedLanguage] ?? id;
   }
 
-  void _showComingSoon(BuildContext context, String featureName) {
-    Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$featureName is coming soon!')),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -433,9 +431,24 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
                       );
                     },
                   ),
+                // ── PRACTICE QUESTIONS ───────────────────────
+                if (RoleService.isStudent() || RoleService.isTeacher())
+                  ListTile(
+                    leading: const Icon(Icons.quiz_outlined),
+                    title: const Text("Practice Questions"),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const PracticeQuestionsScreen(),
+                        ),
+                      );
+                    },
+                  ),
               ],
             ),
-           // ── QUESTION BANK ──────────────────────────
+            // ── QUESTION BANK ──────────────────────────
             if (RoleService.isStudent() || RoleService.isTeacher())
               ListTile(
                 leading: const Icon(Icons.quiz_rounded),
@@ -450,7 +463,25 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
                   );
                 },
               ),
+
+
+            // ── Chatbot ─────────────────────────────────
+            ListTile(
+              leading: const Icon(Icons.chat_rounded),
+              title: const Text("Chatbot"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ChatbotScreen(),
+                  ),
+                );
+              },
+            ),
+
             // ── Conversion ─────────────────────────────
+
             ListTile(
               leading: const Icon(Icons.transform),
               title: const Text("Conversion"),
@@ -494,68 +525,68 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
               ),
 
             // ── Pricing ────────────────────────────────
-            ListTile(
-              leading: const Icon(Icons.price_change),
-              title: const Text("Pricing"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const PricingMenuScreen(),
-                  ),
-                );
-              },
-            ),
+            // ListTile(
+            //   leading: const Icon(Icons.price_change),
+            //   title: const Text("Pricing"),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (_) => const PricingMenuScreen(),
+            //       ),
+            //     );
+            //   },
+            // ),
 
-            // ── Reports ────────────────────────────────
-            ExpansionTile(
-              leading: const Icon(Icons.bar_chart),
-              title: const Text("Reports"),
-              childrenPadding: const EdgeInsets.only(left: 20),
-              children: [
-                ListTile(
-                  leading:
-                      const Icon(Icons.account_balance_wallet),
-                  title: const Text("Balance Report"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => BalanceReportScreen()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.history),
-                  title: const Text("Balance History"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => BalanceHistoryScreen()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.receipt_long),
-                  title: const Text("Transaction History"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              TransactionHistoryScreen()),
-                    );
-                  },
-                ),
-              ],
-            ),
+            // // ── Reports ────────────────────────────────
+            // ExpansionTile(
+            //   leading: const Icon(Icons.bar_chart),
+            //   title: const Text("Reports"),
+            //   childrenPadding: const EdgeInsets.only(left: 20),
+            //   children: [
+            //     ListTile(
+            //       leading:
+            //           const Icon(Icons.account_balance_wallet),
+            //       title: const Text("Balance Report"),
+            //       onTap: () {
+            //         Navigator.pop(context);
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (_) => BalanceReportScreen()),
+            //         );
+            //       },
+            //     ),
+            //     ListTile(
+            //       leading: const Icon(Icons.history),
+            //       title: const Text("Balance History"),
+            //       onTap: () {
+            //         Navigator.pop(context);
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (_) => BalanceHistoryScreen()),
+            //         );
+            //       },
+            //     ),
+            //     ListTile(
+            //       leading: const Icon(Icons.receipt_long),
+            //       title: const Text("Transaction History"),
+            //       onTap: () {
+            //         Navigator.pop(context);
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (_) =>
+            //                   TransactionHistoryScreen()),
+            //         );
+            //       },
+            //     ),
+            //   ],
+            // ),
 
-            const Divider(color: TemplateTheme.border),
+            // const Divider(color: TemplateTheme.border),
 
             // ── About Us ───────────────────────────────
             ExpansionTile(
